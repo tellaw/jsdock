@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"tellaw.org/jsdock/config"
+	"tellaw.org/jsdock/jsonparser"
 	"tellaw.org/jsdock/services"
 )
 
@@ -26,7 +27,9 @@ func main() {
 	fmt.Println("Action : ", actionName)
 	fmt.Println("Path actuel : ", config.GetCurrentPath())
 
-	fmt.Println("Path to Config dir : ", config.GetConfigDir())
+	//fmt.Println("Path to Config dir : ", config.GetConfigDir())
+
+	jsonparser.LoadJSON("php7.4")
 
 	panic("end")
 

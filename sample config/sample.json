@@ -1,0 +1,23 @@
+{
+    "alias" : "myapp",
+    "sources" : "/home/tellaw",
+    "image" : "apache-php",
+    "env" : {
+        "param": "value"
+    },
+    "port" : [
+        {
+            "host" : "80",
+            "container" : "80"
+        }
+    ],
+    "volumes" : [
+        {
+            "host" : "/",
+            "container" : "/var/www"
+        }
+    ],
+    "network" : [
+
+    ]
+}
