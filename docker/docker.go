@@ -51,8 +51,8 @@ func StartProfile(profileData model.Profile) {
 }
 
 // dockerExec method used to start a docker command
-func dockerExec(command string) {
-	cmd := exec.Command("ls", "-lah")
+func dockerExec(command [10]string) {
+	cmd := exec.Command(command[0])
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
