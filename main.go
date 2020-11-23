@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -24,10 +24,10 @@ func main() {
 	actionName := os.Args[1]
 	profileName := os.Args[2]
 
-	fmt.Println("Action : ", actionName)
-	fmt.Println("Profile Name : ", profileName)
+	log.Println("Action : ", actionName)
+	log.Println("Profile Name : ", profileName)
 
-	fmt.Println("Path actuel : ", config.GetCurrentPath())
+	log.Println("Path actuel : ", config.GetCurrentPath())
 
 	//fmt.Println("Path to Config dir : ", config.GetConfigDir())
 
@@ -40,6 +40,7 @@ func main() {
 
 	default:
 		// Default action to define
+		// No command, so we have to find the correct command
 	}
 
 }

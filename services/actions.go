@@ -38,18 +38,26 @@ func Start(profileName string) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
 	}
 
-	// Check if a profile with same alias is already runnin
-	if docker.IsProfileRunning(profileName) {
-		log.Println("Profile [" + profileName + "] is running")
-		// Stop it
-	}
-
-	if docker.IsProfileStopped(profileName) {
-		// Then remove the profile using a simple docker rm
-	}
-
 	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)
 
+	// Check if a profile with same alias is already runnin
+	if docker.IsProfileRunning(docker.GetAlias(profileData)) {
+		log.Println("Profile [" + profileName + "] is running, stopping...")
+		// Stop it
+		docker.StopProfile(profileData)
+	} else {
+		log.Println("profile is not running")
+	}
+	log.Println("profile not running anymore")
+
+	if docker.IsProfileStopped(docker.GetAlias(profileData)) {
+		// Then remove the profile using a simple docker rm
+		log.Println("Profile [" + profileName + "] is stopped, removing...")
+		docker.RemoveProfile(profileData)
+	} else {
+		log.Println("profile is not stopped")
+	}
+	log.Println("profile stopped")
 	docker.StartProfile(profileData)
 
 }

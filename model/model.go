@@ -8,13 +8,25 @@ This file should contain all func related to the data model.
 type Profile struct {
 
 	// https://yourbasic.org/golang/json-example/
-	Alias   string `json:"alias"`
-	Source  string `json:"sources"`
-	Image   string `json:"image"`
-	Env     map[string]string
-	Ports   map[string]string
-	Volumes map[string]string
+	Alias   string            `json:"alias"`
+	Sources string            `json:"sources"`
+	Image   string            `json:"image"`
+	Env     map[string]string `json:"env"`
+	Ports   []Port            `json:"ports"`
+	Volumes []Volume          `json:"volumes"`
 	Network map[string]string
+}
+
+// Volume is the struct object for docker vulomes mapping
+type Volume struct {
+	Host      string `json:"host"`
+	Container string `json:"container"`
+}
+
+// Port is the model for ports to listen to
+type Port struct {
+	Host      string `json:"host"`
+	Container string `json:"container"`
 }
 
 // Config is the struct describing the configuration file
