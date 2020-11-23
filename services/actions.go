@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 
 	"tellaw.org/jsdock/docker"
+	"tellaw.org/jsdock/jsonparser"
 	"tellaw.org/jsdock/prompt"
 )
 
@@ -36,18 +37,20 @@ func Start(profileName string) {
 		Look if profile is running
 			stop if running with down command
 			start it then
-
 	*/
-
-	if !docker.IsProfileRunning("php-7.4") {
-		fmt.Println("Profile is not running")
+	if !docker.IsProfileRunning(profileName) {
+		fmt.Println("Profile [" + profileName + "]is not running")
 	} else {
-		fmt.Println("Profile is running")
+		fmt.Println("Profile [" + profileName + "] is running")
 	}
 
 	// Check if profile exists and load it
 	if !HasProfileFile(profileName) {
 		panic("The requested profile doesn't exists")
 	}
+
+	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)
+
+	docker.StartProfile(profileData)
 
 }

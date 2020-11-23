@@ -4,7 +4,7 @@ package model
 This file should contain all func related to the data model.
 */
 
-// Profile is the struct representing the data of the profile json file
+// Profile is the struct representing the data of the profile json file describing
 type Profile struct {
 
 	// https://yourbasic.org/golang/json-example/
@@ -18,5 +18,7 @@ type Profile struct {
 }
 
 // Config is the struct describing the configuration file
+// Located in the directory
 type Config struct {
+	Profile string `json:"profile"`
 }

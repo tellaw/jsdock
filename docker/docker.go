@@ -6,8 +6,11 @@ Parameters line building is done by dockerbuilder.
 */
 import (
 	"log"
+	"os"
 	"os/exec"
 	"strings"
+
+	"tellaw.org/jsdock/model"
 )
 
 // IsProfileRunning is used to check with docker that a profile is already running
@@ -36,4 +39,24 @@ func isDockerWorking(response string) bool {
 		return true
 	}
 	return false
+}
+
+// StartProfile is the method used to run a profile
+func StartProfile(profileData model.Profile) {
+
+	command := buildCommand(profileData, "start")
+
+	dockerExec(command)
+
+}
+
+// dockerExec method used to start a docker command
+func dockerExec(command string) {
+	cmd := exec.Command("ls", "-lah")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err != nil {
+		log.Fatalf("cmd.Run() failed with %s\n", err)
+	}
 }

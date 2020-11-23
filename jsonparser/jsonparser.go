@@ -2,23 +2,20 @@ package jsonparser
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 
 	"tellaw.org/jsdock/model"
-	"tellaw.org/jsdock/services"
 )
 
 /*
 Package used to write and read JSon
 */
+// LoadProfileJSON method used to load JSon file
+func LoadProfileJSON(profileLocation string, fileName string) model.Profile {
 
-// LoadJSON method used to load JSon file
-func LoadJSON(fileName string) {
-
-	fmt.Println(services.GetProfileLocation() + fileName + ".json")
-	file, _ := ioutil.ReadFile(services.GetProfileLocation() + fileName + ".json")
+	//fmt.Println(services.GetProfileLocation() + fileName + ".json")
+	file, _ := ioutil.ReadFile(profileLocation + fileName + ".json")
 
 	var data model.Profile
 
@@ -26,6 +23,24 @@ func LoadJSON(fileName string) {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(data.Alias)
+
+	return data
+
+}
+
+// LoadConfigJSON method used to load the config JSon file
+func LoadConfigJSON(profileLocation string, fileName string) model.Config {
+
+	//fmt.Println(services.GetProfileLocation() + fileName + ".json")
+	file, _ := ioutil.ReadFile(profileLocation + fileName + ".json")
+
+	var data model.Config
+
+	err := json.Unmarshal([]byte(file), &data)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return data
 
 }
