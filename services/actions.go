@@ -1,8 +1,8 @@
 package services
 
 import (
-	"fmt"
 	"io/ioutil"
+	"log"
 
 	"tellaw.org/jsdock/docker"
 	"tellaw.org/jsdock/jsonparser"
@@ -33,20 +33,19 @@ func Attach() {
 // Start is the method used to start a docker kit
 func Start(profileName string) {
 
-	/*
-		Look if profile is running
-			stop if running with down command
-			start it then
-	*/
-	if !docker.IsProfileRunning(profileName) {
-		fmt.Println("Profile [" + profileName + "]is not running")
-	} else {
-		fmt.Println("Profile [" + profileName + "] is running")
-	}
-
 	// Check if profile exists and load it
 	if !HasProfileFile(profileName) {
-		panic("The requested profile doesn't exists")
+		log.Fatal("The requested profile " + profileName + " does not exists")
+	}
+
+	// Check if a profile with same alias is already runnin
+	if docker.IsProfileRunning(profileName) {
+		log.Println("Profile [" + profileName + "] is running")
+		// Stop it
+	}
+
+	if docker.IsProfileStopped(profileName) {
+		// Then remove the profile using a simple docker rm
 	}
 
 	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)

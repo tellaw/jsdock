@@ -10,20 +10,20 @@ import (
 This file should contain all func related to the building of command line parameters
 for the docker command line
 */
-func buildCommand(profileData model.Profile, action string) [10]string {
+func buildCommand(profileData model.Profile, action string) []string {
 
-	var commandLine [10]string
-
-	commandLine[0] = "docker "
+	commandLine := []string{"", "", "", ""}
 
 	switch strings.ToLower(action) {
 
 	case "start":
 		// Start action
-		commandLine[1] = " start "
+		commandLine[0] = "run"
 	default:
 		// Default action to define
 	}
+
+	commandLine = buildParameters(profileData, commandLine)
 
 	//return commandLine
 	return commandLine
@@ -33,7 +33,9 @@ func buildCommand(profileData model.Profile, action string) [10]string {
 // buildParameters is used to build the command line parameters
 func buildParameters(profileData model.Profile, commandLine []string) []string {
 
-	commandLine[2] = getImage(profileData)
+	commandLine[3] = getImage(profileData)
+	commandLine[2] = "-d"
+	commandLine[1] = getName(profileData)
 
 	return commandLine
 
@@ -41,6 +43,10 @@ func buildParameters(profileData model.Profile, commandLine []string) []string {
 
 func getImage(profileData model.Profile) string {
 	return profileData.Image
+}
+
+func getName(profileData model.Profile) string {
+	return "--name=" + "jsdock-" + profileData.Alias
 }
 
 func getSourcesVolume(profileData model.Profile) string {
