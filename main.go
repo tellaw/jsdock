@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"strings"
 
 	"tellaw.org/jsdock/config"
@@ -20,11 +19,12 @@ Action & path
 */
 func main() {
 
-	// Argument 1 is the action
-	actionName := os.Args[1]
-	profileName := os.Args[2]
+	pathParam := services.GetPathParam()
+	actionName := services.GetAction()
+	profileName := services.GetProfile()
 
-	log.Println("Action : ", actionName)
+	log.Println("Action to apply : ", actionName)
+	log.Println("Sources Path : ", pathParam)
 	log.Println("Profile Name : ", profileName)
 
 	log.Println("Path actuel : ", config.GetCurrentPath())
