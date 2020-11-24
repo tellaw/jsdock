@@ -4,7 +4,6 @@ import (
 	"log"
 	"strings"
 
-	"tellaw.org/jsdock/config"
 	"tellaw.org/jsdock/services"
 )
 
@@ -23,11 +22,11 @@ func main() {
 	actionName := services.GetAction()
 	profileName := services.GetProfile()
 
+	log.Println("************************************")
 	log.Println("Action to apply : ", actionName)
 	log.Println("Sources Path : ", pathParam)
 	log.Println("Profile Name : ", profileName)
-
-	log.Println("Path actuel : ", config.GetCurrentPath())
+	log.Println("************************************")
 
 	//fmt.Println("Path to Config dir : ", config.GetConfigDir())
 

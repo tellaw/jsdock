@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"tellaw.org/jsdock/model"
 )
@@ -29,10 +30,10 @@ func LoadProfileJSON(profileLocation string, fileName string) model.Profile {
 }
 
 // LoadConfigJSON method used to load the config JSon file
-func LoadConfigJSON(profileLocation string, fileName string) model.Config {
+func LoadConfigJSON(configFileLocation string) model.Config {
 
 	//fmt.Println(services.GetProfileLocation() + fileName + ".json")
-	file, _ := ioutil.ReadFile(profileLocation + fileName + ".json")
+	file, _ := ioutil.ReadFile(configFileLocation + ".jsdock.json")
 
 	var data model.Config
 
@@ -43,4 +44,18 @@ func LoadConfigJSON(profileLocation string, fileName string) model.Config {
 
 	return data
 
+}
+
+// HasConfigFile Method used to know if a config file exists
+func HasConfigFile(configFileLocation string) bool {
+
+	fullFileName := ""
+	fullFileName = configFileLocation + ".jsdock.json"
+
+	_, err := os.Stat(fullFileName)
+	if os.IsNotExist(err) {
+		//log.Println("Unable to find profile in : " + fullFileName)
+		return false
+	}
+	return true
 }

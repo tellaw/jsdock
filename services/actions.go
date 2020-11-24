@@ -3,6 +3,7 @@ package services
 import (
 	"io/ioutil"
 	"log"
+	"strings"
 
 	"tellaw.org/jsdock/docker"
 	"tellaw.org/jsdock/jsonparser"
@@ -33,6 +34,9 @@ func Attach() {
 // Start is the method used to start a docker kit
 func Start(profileName string) {
 
+	if strings.TrimSpace(profileName) == "" {
+		log.Fatal("Missing the name of the profile to use for container")
+	}
 	// Check if profile exists and load it
 	if !HasProfileFile(profileName) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
