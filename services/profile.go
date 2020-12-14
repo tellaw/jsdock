@@ -20,7 +20,7 @@ func getProfilesPath() string {
 		log.Fatal(err)
 	}
 
-	return usr.HomeDir
+	return usr.HomeDir + "/jsdock/"
 
 }
 
