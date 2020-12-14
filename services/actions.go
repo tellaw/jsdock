@@ -11,7 +11,7 @@ import (
 )
 
 // Attach is used to configure a directory to work with this app
-func Attach() {
+func Attach() string {
 
 	// Grab available profiles
 	profiles := GetProfileList()
@@ -28,6 +28,8 @@ func Attach() {
 	if err != nil {
 		panic(err)
 	}
+
+	return result
 
 }
 

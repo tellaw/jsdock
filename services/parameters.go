@@ -57,8 +57,8 @@ func GetAction() string {
 	}
 
 	// No Verb
+	return Attach()
 
-	return ""
 }
 
 // GetProfile Used to find the profile to use
