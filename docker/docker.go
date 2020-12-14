@@ -61,12 +61,16 @@ func RemoveProfile(profileData model.Profile) {
 	dockerStopOrDown(command)
 }
 
+// Connect is used to connect to container
+func Connect(profileData model.Profile) {
+	command := buildCommand(profileData, "connect")
+	fmt.Println("docker", command)
+}
+
 // StartProfile is the method used to run a profile
 func StartProfile(profileData model.Profile) {
-
 	command := buildCommand(profileData, "start")
 	dockerRun(command)
-
 }
 
 // dockerExec method used to start a docker command

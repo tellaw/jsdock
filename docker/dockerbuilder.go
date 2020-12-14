@@ -37,6 +37,12 @@ func buildCommand(profileData model.Profile, action string) []string {
 		commandLine[0] = "rm"
 		commandLine = append(commandLine, GetAlias(profileData))
 
+	case "connect":
+		commandLine[0] = "exec"
+		commandLine = append(commandLine, "-it")
+		commandLine = append(commandLine, GetAlias(profileData))
+		commandLine = append(commandLine, "/bin/bash")
+
 	default:
 		// Default action to define
 	}

@@ -1,21 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
 	"tellaw.org/jsdock/services"
 )
 
+// Compiler : go build -ldflags "-X main.version='0.1'" -o bin/jsdock
+var version string
+
 // Basic command : jsdock start in the directory
-/*
-Command line parameters :
-
-No parameter = Valid
-Action
-Action & path
-
-*/
 func main() {
 
 	pathParam := services.GetPathParam()
@@ -26,6 +22,7 @@ func main() {
 	log.Println("Action to apply : ", actionName)
 	log.Println("Sources Path : ", pathParam)
 	log.Println("Profile Name : ", profileName)
+	log.Println("jsdock version : ", version)
 	log.Println("************************************")
 
 	//fmt.Println("Path to Config dir : ", config.GetConfigDir())
@@ -37,9 +34,19 @@ func main() {
 	case "start":
 		services.Start(profileName)
 
+	case "stop":
+		services.Stop(profileName)
+
+	case "connect":
+		services.Connect(profileName)
+
+	case "version":
+		fmt.Println(version)
+
 	default:
 		// Default action to define
 		// No command, so we have to find the correct command
+		services.Start(profileName)
 	}
 
 }

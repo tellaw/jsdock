@@ -34,7 +34,7 @@ func GetPathParam() string {
 // GetAction is the method used to find the correct action to apply
 func GetAction() string {
 
-	actionVerbs := []string{"start", "stop", "attach", "", ""}
+	actionVerbs := []string{"start", "stop", "attach", "connect", ""}
 
 	if len(os.Args) > 1 && strings.TrimSpace(os.Args[1]) != "" {
 

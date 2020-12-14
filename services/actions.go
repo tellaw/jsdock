@@ -31,6 +31,44 @@ func Attach() {
 
 }
 
+// Stop function is used to stop started continers
+func Stop(profileName string) {
+
+	if strings.TrimSpace(profileName) == "" {
+		log.Fatal("Missing the name of the profile to use for container")
+	}
+	// Check if profile exists and load it
+	if !HasProfileFile(profileName) {
+		log.Fatal("The requested profile " + profileName + " does not exists")
+	}
+
+	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)
+	// Check if a profile with same alias is already runnin
+	if docker.IsProfileRunning(docker.GetAlias(profileData)) {
+		log.Println("Profile [" + profileName + "] is running, stopping...")
+		// Stop it
+		docker.StopProfile(profileData)
+	} else {
+		log.Println("profile is not running")
+	}
+	log.Println("profile not running anymore")
+
+}
+
+// Connect Method is used to open a bash shell in the container
+func Connect(profileName string) {
+	if strings.TrimSpace(profileName) == "" {
+		log.Fatal("Missing the name of the profile to use for container")
+	}
+	// Check if profile exists and load it
+	if !HasProfileFile(profileName) {
+		log.Fatal("The requested profile " + profileName + " does not exists")
+	}
+
+	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)
+	docker.Connect(profileData)
+}
+
 // Start is the method used to start a docker kit
 func Start(profileName string) {
 
