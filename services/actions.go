@@ -44,7 +44,7 @@ func Stop(profileName string) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
 	}
 
-	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)
+	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
 	// Check if a profile with same alias is already runnin
 	if docker.IsProfileRunning(docker.GetAlias(profileData)) {
 		log.Println("Profile [" + profileName + "] is running, stopping...")
@@ -67,7 +67,7 @@ func Connect(profileName string) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
 	}
 
-	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)
+	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
 	docker.Connect(profileData)
 }
 
@@ -82,7 +82,7 @@ func Start(profileName string) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
 	}
 
-	profileData := jsonparser.LoadProfileJSON(GetProfileLocation(), profileName)
+	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
 
 	// Check if a profile with same alias is already runnin
 	if docker.IsProfileRunning(docker.GetAlias(profileData)) {

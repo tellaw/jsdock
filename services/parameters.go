@@ -57,7 +57,7 @@ func GetAction() string {
 	}
 
 	// No Verb
-	return Attach()
+	return "start"
 
 }
 
@@ -85,6 +85,7 @@ func GetProfile() string {
 	// Check if there is a config of attached directory
 	path, _ := os.Getwd()
 	if jsonparser.HasConfigFile(path) {
+
 		configData := jsonparser.LoadConfigJSON(path)
 		return configData.Profile
 	}

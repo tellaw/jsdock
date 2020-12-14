@@ -32,12 +32,13 @@ func LoadProfileJSON(profileLocation string, fileName string) model.Profile {
 // LoadConfigJSON method used to load the config JSon file
 func LoadConfigJSON(configFileLocation string) model.Config {
 
-	//fmt.Println(services.GetProfileLocation() + fileName + ".json")
-	file, _ := ioutil.ReadFile(configFileLocation + ".jsdock.json")
+	file, _ := ioutil.ReadFile(configFileLocation + "/.jsdock")
 
 	var data model.Config
 
 	err := json.Unmarshal([]byte(file), &data)
+
+	//log.Println(".jsdock file contain : ", data.Profile)
 	if err != nil {
 		log.Println(err)
 	}
@@ -50,11 +51,12 @@ func LoadConfigJSON(configFileLocation string) model.Config {
 func HasConfigFile(configFileLocation string) bool {
 
 	fullFileName := ""
-	fullFileName = configFileLocation + ".jsdock.json"
+	fullFileName = configFileLocation + "/.jsdock"
 
 	_, err := os.Stat(fullFileName)
+
 	if os.IsNotExist(err) {
-		//log.Println("Unable to find profile in : " + fullFileName)
+		log.Println("Unable to find profile in : " + fullFileName)
 		return false
 	}
 	return true

@@ -33,11 +33,10 @@ func GetProfileLocation() string {
 func HasProfileFile(fileName string) bool {
 
 	fullFileName := ""
-	fullFileName = GetProfileLocation() + fileName + ".json"
-
+	fullFileName = getProfilesPath() + fileName + ".json"
 	_, err := os.Stat(fullFileName)
 	if os.IsNotExist(err) {
-		//log.Println("Unable to find profile in : " + fullFileName)
+		log.Println("Unable to find profile in : " + fullFileName)
 		return false
 	}
 	return true
