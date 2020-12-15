@@ -16,7 +16,9 @@ import (
 
 // IsProfileRunning is used to check with docker that a profile is already running
 func IsProfileRunning(profileAlias string) bool {
-	log.Println("Looking for running profile : docker ps")
+
+	//log.Println("Looking for running profile : docker ps")
+
 	cmd := exec.Command("docker", "ps")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -33,7 +35,7 @@ func IsProfileRunning(profileAlias string) bool {
 
 // IsProfileStopped is used to check if the profile is stopped
 func IsProfileStopped(profileAlias string) bool {
-	log.Println("Looking for stopped profile : docker ps -a")
+	//log.Println("Looking for stopped profile : docker ps -a")
 	cmd := exec.Command("docker", "ps", "-a")
 	out, err := cmd.CombinedOutput()
 	if err != nil {

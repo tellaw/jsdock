@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -12,6 +13,8 @@ import (
 
 // Attach is used to configure a directory to work with this app
 func Attach() string {
+
+	fmt.Println("Select the profile to attach to this directory")
 
 	// Grab available profiles
 	profiles := GetProfileList()
@@ -53,7 +56,7 @@ func Stop(profileName string) {
 	} else {
 		log.Println("profile is not running")
 	}
-	log.Println("profile not running anymore")
+	//log.Println("profile not running anymore")
 
 }
 

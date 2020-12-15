@@ -18,14 +18,11 @@ func main() {
 	actionName := services.GetAction()
 	profileName := services.GetProfile()
 
-	log.Println("************************************")
-	log.Println("Action to apply : ", actionName)
-	log.Println("Sources Path : ", pathParam)
-	log.Println("Profile Name : ", profileName)
-	log.Println("jsdock version : ", version)
-	log.Println("************************************")
-
-	//fmt.Println("Path to Config dir : ", config.GetConfigDir())
+	log.Println("JSDOCK version ", version)
+	log.Println("Action : ", actionName)
+	log.Println("Sources : ", pathParam)
+	log.Println("Profile : ", profileName)
+	log.Println("------------------------")
 
 	switch strings.ToLower(actionName) {
 	case "attach":
