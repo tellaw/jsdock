@@ -14,6 +14,8 @@ var version string
 // Basic command : jsdock start in the directory
 func main() {
 
+	services.CheckAndInitNetwork()
+
 	pathParam := services.GetPathParam()
 	actionName := services.GetAction()
 	profileName := services.GetProfile()

@@ -51,6 +51,31 @@ func IsProfileStopped(profileAlias string) bool {
 	return false
 }
 
+// IsNetworkAvailable method used to check if network is set
+func IsNetworkAvailable() bool {
+	//log.Println("Looking for stopped profile : docker ps -a")
+	cmd := exec.Command("docker", "network", "ls")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("combined err:\n%s\n", string(out))
+		log.Fatalf("Docker is not running !")
+
+	}
+
+	if strings.Contains(string(out), "jsdock_net") {
+		return true
+	}
+
+	return false
+}
+
+// InitNetwork method is used to setup the dev network
+func InitNetwork() {
+	commandLine := []string{""}
+	commandLine[0] = "docker network create jsdock_net"
+	dockerRun(commandLine)
+}
+
 // StopProfile is used to stop a profile
 func StopProfile(profileData model.Profile) {
 	command := buildCommand(profileData, "stop")
@@ -67,6 +92,7 @@ func RemoveProfile(profileData model.Profile) {
 func Connect(profileData model.Profile) {
 	command := buildCommand(profileData, "connect")
 	fmt.Println("docker", command)
+	//dockerRun(command)
 }
 
 // StartProfile is the method used to run a profile
@@ -78,7 +104,7 @@ func StartProfile(profileData model.Profile) {
 // dockerExec method used to start a docker command
 func dockerStopOrDown(command []string) {
 
-	cmd := exec.Command("docker", command...)
+	cmd := exec.Command("bash", "-c", strings.Join(command, " "))
 	//cmd.Stdout = os.Stdout
 	//cmd.Stderr = os.Stderr
 	_ = cmd.Run()
@@ -88,9 +114,9 @@ func dockerStopOrDown(command []string) {
 // dockerExec method used to start a docker command
 func dockerRun(command []string) {
 
-	log.Println("Command is : docker ", command)
+	log.Println("Command is : ", command)
 
-	cmd := exec.Command("docker", command...)
+	cmd := exec.Command("bash", "-c", strings.Join(command, " "))
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()

@@ -108,3 +108,10 @@ func Start(profileName string) {
 	docker.StartProfile(profileData)
 
 }
+
+// CheckAndInitNetwork method is used to check if jsdock network is available
+func CheckAndInitNetwork() {
+	if !docker.IsNetworkAvailable() {
+		docker.InitNetwork()
+	}
+}

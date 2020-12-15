@@ -20,25 +20,29 @@ func buildCommand(profileData model.Profile, action string) []string {
 
 	case "start":
 		// Start action
-		commandLine[0] = "run"
-		commandLine = append(commandLine, getName(profileData))
+		commandLine[0] = "docker run"
 		commandLine = append(commandLine, "-d")
-		commandLine = append(commandLine, getSourcesVolume(profileData))
+		commandLine = append(commandLine, getName(profileData))
+		if sourceVolume := getSourcesVolume(profileData); sourceVolume != "" {
+			commandLine = append(commandLine, getSourcesVolume(profileData))
+		}
 		commandLine = getPorts(commandLine, profileData)
 		commandLine = getEnv(commandLine, profileData)
 		commandLine = getVolumes(commandLine, profileData)
+		commandLine = append(commandLine, "--network jsdock_net")
+
 		commandLine = append(commandLine, getImage(profileData))
 
 	case "stop":
-		commandLine[0] = "stop"
+		commandLine[0] = "docker stop"
 		commandLine = append(commandLine, GetAlias(profileData))
 
 	case "remove":
-		commandLine[0] = "rm"
+		commandLine[0] = "docker rm"
 		commandLine = append(commandLine, GetAlias(profileData))
 
 	case "connect":
-		commandLine[0] = "exec"
+		commandLine[0] = "docker exec"
 		commandLine = append(commandLine, "-it")
 		commandLine = append(commandLine, GetAlias(profileData))
 		commandLine = append(commandLine, "/bin/bash")
@@ -62,24 +66,32 @@ func getImage(profileData model.Profile) string {
 }
 
 func getName(profileData model.Profile) string {
-	return "--name=" + GetAlias(profileData)
+	return "--name " + GetAlias(profileData)
 }
 
 // GetAlias is used to find the container alias that should be used by the application
 func GetAlias(profileData model.Profile) string {
-	return "jsdock-" + profileData.Alias
+	return "jsdock_" + profileData.Alias
 }
 
 func getSourcesVolume(profileData model.Profile) string {
-	host := config.GetCurrentPath()
-	container := profileData.Sources
 
-	return "-v=" + host + ":" + container
+	if profileData.Sources != "" {
+
+		host := config.GetCurrentPath()
+		container := profileData.Sources
+
+		return "-v " + host + ":" + container
+
+	} else {
+		return ""
+	}
+
 }
 func getVolumes(commandLine []string, profileData model.Profile) []string {
 
 	for _, volume := range profileData.Volumes {
-		commandLine = append(commandLine, "-v="+volume.Host+":"+volume.Container)
+		commandLine = append(commandLine, "-v "+volume.Host+":"+volume.Container)
 	}
 	return commandLine
 }
@@ -87,7 +99,7 @@ func getVolumes(commandLine []string, profileData model.Profile) []string {
 func getEnv(commandLine []string, profileData model.Profile) []string {
 
 	for keyItem, valueItem := range profileData.Env {
-		commandLine = append(commandLine, "-e="+keyItem+":"+valueItem)
+		commandLine = append(commandLine, "-e "+keyItem+"='"+valueItem+"'")
 	}
 
 	return commandLine
@@ -96,7 +108,7 @@ func getEnv(commandLine []string, profileData model.Profile) []string {
 func getPorts(commandLine []string, profileData model.Profile) []string {
 
 	for _, port := range profileData.Ports {
-		commandLine = append(commandLine, "-p="+port.Host+":"+port.Container)
+		commandLine = append(commandLine, "-p "+port.Host+":"+port.Container)
 	}
 
 	return commandLine
