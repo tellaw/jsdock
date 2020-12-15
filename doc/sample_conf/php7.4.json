@@ -1,0 +1,26 @@
+{
+	"alias" : "imageAlias",
+	"image" : "tellaw-php-74-apache",
+	"sources" : "/var/www/html",
+	"ports" : [
+        {
+            "host" : "80",
+            "container" : "80"
+        },
+		{
+            "host" : "82",
+            "container" : "82"
+        }
+    ],
+	"env" : {
+		"mykey":"myvalue",
+		"mykey2":"myvalue2"
+	},
+	"volumes" : [
+        {
+            "host" : "/tmp",
+            "container" : "/tmp"
+        }
+    ]
+	
+}
