@@ -5,6 +5,18 @@ Forget the dedicated docker compose per application or the big command lines.
 
 JSDock wrap development using docker and WSL2 into something very easy.
 
+## How does it works ?
+JSDock keep the configuration of every server in a profile repository described in JSON (~/jsdock/). Each profile is linked automatically to a dev network, making communication so easy.
+Profiles can be configured using dynamic sources directory. The sources directory can be injected automatically inside the server using you path context or any path given by you.
+
+*So, want to start ?*
+
+1. Create a profile in ~/jsdock/ or copy a sample profile -> https://github.com/tellaw/jsdock/tree/master/doc/sample_conf
+2. Go to your sources directory and attach it the good profile -> '> jsdock attach'
+3. Start server => '> jsdock' 
+
+Or just read this documentation...
+
 ## Setup & Install
 To install the application in your linux system, do the following.
 
