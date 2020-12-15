@@ -38,7 +38,7 @@ func main() {
 		services.Connect(profileName)
 
 	case "version":
-		fmt.Println(version)
+		fmt.Println("Current version is : ", version)
 
 	default:
 		// Default action to define
