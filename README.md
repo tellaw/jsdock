@@ -1,5 +1,10 @@
 # JSDock
 
+JSDock is a shortname for JSon Docker. The goal of this application is to manage profiles of developement servers and makes very easy to start them using any source code.
+Forget the dedicated docker compose per application or the big command lines.
+
+JSDock wrap development using docker and WSL2 into something very easy.
+
 ## Setup & Install
 To install the application in your linux system, do the following.
 
