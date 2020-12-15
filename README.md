@@ -80,6 +80,11 @@ Take a look at the configuration section
 ## Configuration
 
 ### Profile
+Profiles must be stored in <home>/jsdock directory
+```
+~/jsdock/
+```
+	
 Sample configuration file
 ```
 {
