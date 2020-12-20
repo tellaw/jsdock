@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os/exec"
 	"strings"
 
 	"tellaw.org/jsdock/docker"
 	"tellaw.org/jsdock/jsonparser"
+	"tellaw.org/jsdock/model"
 	"tellaw.org/jsdock/prompt"
 )
 
@@ -87,16 +89,18 @@ func Start(profileName string) {
 
 	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
 
+	CheckAndResolveProfileConflicts(profileData)
 	// Check if a profile with same alias is already runnin
-	if docker.IsProfileRunning(docker.GetAlias(profileData)) {
-		log.Println("Profile [" + profileName + "] is running, stopping...")
-		// Stop it
-		docker.StopProfile(profileData)
-	} else {
-		log.Println("profile is not running")
-	}
-	log.Println("profile not running anymore")
-
+	/*
+		if docker.IsProfileRunning(docker.GetAlias(profileData)) {
+			log.Println("Profile [" + profileName + "] is running, stopping...")
+			// Stop it
+			docker.StopProfile(profileData)
+		} else {
+			log.Println("profile is not running")
+		}
+		log.Println("profile not running anymore")
+	*/
 	if docker.IsProfileStopped(docker.GetAlias(profileData)) {
 		// Then remove the profile using a simple docker rm
 		log.Println("Profile [" + profileName + "] is stopped, removing...")
@@ -106,6 +110,44 @@ func Start(profileName string) {
 	}
 	log.Println("profile stopped")
 	docker.StartProfile(profileData)
+
+}
+
+// CheckAndResolveProfileConflicts is a method used to check if there is any conflict ( profile stated, port in use )
+func CheckAndResolveProfileConflicts(profileData model.Profile) bool {
+
+	// Loop over ps to check used ports
+	cmd := exec.Command("docker", "ps", "-a", "--format \"{{.Names}}|{{.Ports}}\"")
+	out, _ := cmd.CombinedOutput()
+
+	// Split by line & look for the information
+	outputLines := strings.Split(string(out), "\n")
+
+	for _, port := range profileData.Ports {
+
+		requiredPort := port.Container
+
+		for _, line := range outputLines {
+
+			outLineCols := strings.Split(line, "|")
+			if strings.Contains(outLineCols[1], requiredPort) {
+				// Port is in USE, conflict detected
+				// Action is to stop the container, if it doesn't stop, fatal message
+				profileName := outLineCols[0]
+
+				if HasProfileFile(profileName) {
+					Stop(profileName)
+				} else {
+					fmt.Println("Docker with alias " + profileName + " is in conflict")
+				}
+
+			}
+
+		}
+
+	}
+
+	return true
 
 }
 
