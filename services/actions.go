@@ -52,11 +52,11 @@ func Stop(profileName string) {
 	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
 	// Check if a profile with same alias is already runnin
 	if docker.IsProfileRunning(docker.GetAlias(profileData)) {
-		log.Println("Profile [" + profileName + "] is running, stopping...")
+		fmt.Println("Profile [" + profileName + "] is running, stopping...")
 		// Stop it
 		docker.StopProfile(profileData)
 	} else {
-		log.Println("profile is not running")
+		fmt.Println("profile is not running")
 	}
 	//log.Println("profile not running anymore")
 
@@ -103,12 +103,12 @@ func Start(profileName string) {
 	*/
 	if docker.IsProfileStopped(docker.GetAlias(profileData)) {
 		// Then remove the profile using a simple docker rm
-		log.Println("Profile [" + profileName + "] is stopped, removing...")
+		fmt.Println("Profile [" + profileName + "] is stopped, removing...")
 		docker.RemoveProfile(profileData)
 	} else {
-		log.Println("profile is not stopped")
+		fmt.Println("profile is not stopped")
 	}
-	log.Println("profile stopped")
+	fmt.Println("profile stopped")
 	docker.StartProfile(profileData)
 
 }
@@ -117,12 +117,11 @@ func Start(profileName string) {
 func CheckAndResolveProfileConflicts(profileData model.Profile) bool {
 
 	// Loop over ps to check used ports
-	cmd := exec.Command("docker", "ps", "-a", "--format \"{{.Names}}|{{.Ports}}\"")
+	cmd := exec.Command("docker", "ps", "--format", "\"{{.Names}}|{{.Ports}}\"")
 	out, _ := cmd.CombinedOutput()
 
 	// Split by line & look for the information
 	outputLines := strings.Split(string(out), "\n")
-
 	for _, port := range profileData.Ports {
 
 		requiredPort := port.Container
@@ -130,17 +129,17 @@ func CheckAndResolveProfileConflicts(profileData model.Profile) bool {
 		for _, line := range outputLines {
 
 			outLineCols := strings.Split(line, "|")
-			if strings.Contains(outLineCols[1], requiredPort) {
-				// Port is in USE, conflict detected
-				// Action is to stop the container, if it doesn't stop, fatal message
-				profileName := outLineCols[0]
 
-				if HasProfileFile(profileName) {
-					Stop(profileName)
-				} else {
-					fmt.Println("Docker with alias " + profileName + " is in conflict")
+			if len(outLineCols) > 1 {
+
+				fmt.Println("checkConflict : Processing line", requiredPort, outLineCols[1])
+
+				if strings.Contains(outLineCols[1], requiredPort) {
+					processName := outLineCols[0][1:]
+					fmt.Println("Conflict detected, stopping docker process : ", processName)
+					docker.StopDockerProcess(processName)
+
 				}
-
 			}
 
 		}

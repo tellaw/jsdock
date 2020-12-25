@@ -71,7 +71,7 @@ func getName(profileData model.Profile) string {
 
 // GetAlias is used to find the container alias that should be used by the application
 func GetAlias(profileData model.Profile) string {
-	return "jsdock_" + profileData.Alias
+	return profileData.Alias
 }
 
 func getSourcesVolume(profileData model.Profile) string {

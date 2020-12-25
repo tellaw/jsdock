@@ -82,6 +82,34 @@ func StopProfile(profileData model.Profile) {
 	dockerStopOrDown(command)
 }
 
+// StopDockerProcess method stop without control a docker process. Please prefer the StopProfile method.
+func StopDockerProcess(processName string) {
+
+	// Stop
+
+	// Find process ID
+	cmd := exec.Command("docker", "container", "ls", "-q", "--filter", "name="+processName)
+	out, _ := cmd.CombinedOutput()
+
+	fmt.Println("Process ID is : ", strings.TrimSpace(string(out)))
+
+	// docker container stop $(docker container ls -q --filter name=myapp*)
+	//cmd := exec.Command("docker", "stop", processName)
+	cmdstop := exec.Command("docker", "stop", strings.TrimSpace(string(out)))
+	outstop, _ := cmdstop.CombinedOutput()
+
+	fmt.Println("Stopping container : ", strings.TrimSpace(string(outstop)))
+
+	// Destroy
+	cmd = exec.Command("docker", "rm", strings.TrimSpace(string(out)))
+	//cmd.Stdout = os.Stdout
+	//cmd.Stderr = os.Stderr
+	outstop, _ = cmd.CombinedOutput()
+
+	fmt.Println("Removing container : ", strings.TrimSpace(string(outstop)))
+
+}
+
 // RemoveProfile is used to stop a profile
 func RemoveProfile(profileData model.Profile) {
 	command := buildCommand(profileData, "remove")

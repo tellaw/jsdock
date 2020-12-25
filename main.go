@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"tellaw.org/jsdock/services"
@@ -20,11 +19,11 @@ func main() {
 	actionName := services.GetAction()
 	profileName := services.GetProfile()
 
-	log.Println("JSDOCK version ", version)
-	log.Println("Action : ", actionName)
-	log.Println("Sources : ", pathParam)
-	log.Println("Profile : ", profileName)
-	log.Println("------------------------")
+	fmt.Println("JSDOCK version ", version)
+	fmt.Println("Action : ", actionName)
+	fmt.Println("Sources : ", pathParam)
+	fmt.Println("Profile : ", profileName)
+	fmt.Println("------------------------")
 
 	switch strings.ToLower(actionName) {
 	case "attach":
