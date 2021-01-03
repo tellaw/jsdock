@@ -287,3 +287,8 @@ Here you can set volumes to mount inside the container. Sources are a dynamic vo
 }
 ```
 Here, we do inject an apache configuration inside the container.
+
+## Some samples for the configuration.
+I wanted to share with you the samples of my configurations. This may help you to start quickly.
+All files are stored in the following github project :
+https://github.com/tellaw/jsdock-samples
