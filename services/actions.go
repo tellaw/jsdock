@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
+	"text/tabwriter"
 
 	"tellaw.org/jsdock/docker"
 	"tellaw.org/jsdock/jsonparser"
@@ -20,6 +22,10 @@ func Attach() string {
 
 	// Grab available profiles
 	profiles := GetProfileList()
+
+	for _, profile := range profiles {
+		fmt.Println(profile)
+	}
 
 	// Prompt for the profile name
 	result := prompt.InList(profiles, "Select a Profile")
@@ -80,7 +86,7 @@ func Connect(profileName string) {
 func Start(profileName string) {
 
 	if strings.TrimSpace(profileName) == "" {
-		log.Fatal("Missing the name of the profile to use for container")
+		log.Fatal("Missing the name of the profile to use")
 	}
 	// Check if profile exists and load it
 	if !HasProfileFile(profileName) {
@@ -125,20 +131,15 @@ func CheckAndResolveProfileConflicts(profileData model.Profile) bool {
 	for _, port := range profileData.Ports {
 
 		requiredPort := port.Container
-
 		for _, line := range outputLines {
 
 			outLineCols := strings.Split(line, "|")
-
 			if len(outLineCols) > 1 {
 
-				fmt.Println("checkConflict : Processing line", requiredPort, outLineCols[1])
-
+				processName := outLineCols[0][1:]
+				fmt.Println("checking conflict with running container : ", processName, " - ", requiredPort, " - ", outLineCols[1])
 				if strings.Contains(outLineCols[1], requiredPort) {
-					processName := outLineCols[0][1:]
-					fmt.Println("Conflict detected, stopping docker process : ", processName)
 					docker.StopDockerProcess(processName)
-
 				}
 			}
 
@@ -148,6 +149,58 @@ func CheckAndResolveProfileConflicts(profileData model.Profile) bool {
 
 	return true
 
+}
+
+// Help method generates the help output
+func Help() {
+
+	fmt.Println(" ")
+	fmt.Println("Help...")
+	fmt.Println(" ")
+	fmt.Println("Command line example : jsdock <action|optionnal> <profileName|optionnal> <pathAsSource|optionnal>")
+	fmt.Println(" ")
+	fmt.Println("Command line attributes are the following :")
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
+	// "start", "stop", "attach", "connect", "version", "?", "help"
+	fmt.Fprintln(w, "Action\tDefine the action to execute. See below")
+	fmt.Fprintln(w, "Profile\tServer profile to use")
+	fmt.Fprintln(w, "Source\tSource directory to use. (default is the current directory)") // trailing tab
+	w.Flush()
+
+	fmt.Println(" ")
+	fmt.Println("Available actions are :")
+	w = tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
+	// "start", "stop", "attach", "connect", "version", "?", "help"
+	fmt.Fprintln(w, "start\tAction ued to start a server. (Default action)")
+	fmt.Fprintln(w, "stop\tAction used to stop a running server")
+	fmt.Fprintln(w, "attach\tSet te default profile for a directory") // trailing tab
+	fmt.Fprintln(w, "connect\tOutput command to connect to server")
+	fmt.Fprintln(w, "list\tList available profiles")
+	fmt.Fprintln(w, "version\tJSDock current version")
+	fmt.Fprintln(w, "help\tDisplay this help")
+	fmt.Fprintln(w, "?\tDisplay this help")
+	w.Flush()
+	fmt.Println(" ")
+}
+
+// List method will print the detail of existing profiles
+func List() {
+
+	profiles := GetProfileList()
+
+	fmt.Println("")
+	fmt.Println("Available profiles in the JSon repository (" + getProfilesPath() + "):")
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
+
+	for _, profileName := range profiles {
+
+		profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
+
+		fmt.Fprintln(w, profileName+"\t Image => "+profileData.Image+"\t Alias => "+profileData.Alias)
+
+	}
+	w.Flush()
+	fmt.Println(" ")
 }
 
 // CheckAndInitNetwork method is used to check if jsdock network is available

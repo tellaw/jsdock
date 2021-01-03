@@ -91,23 +91,28 @@ func StopDockerProcess(processName string) {
 	cmd := exec.Command("docker", "container", "ls", "-q", "--filter", "name="+processName)
 	out, _ := cmd.CombinedOutput()
 
-	fmt.Println("Process ID is : ", strings.TrimSpace(string(out)))
+	processID := strings.TrimSpace(string(out))
 
-	// docker container stop $(docker container ls -q --filter name=myapp*)
-	//cmd := exec.Command("docker", "stop", processName)
-	cmdstop := exec.Command("docker", "stop", strings.TrimSpace(string(out)))
-	outstop, _ := cmdstop.CombinedOutput()
+	if processID != "" {
 
-	fmt.Println("Stopping container : ", strings.TrimSpace(string(outstop)))
+		fmt.Println("Conflict detected, stopping docker process : ", processName)
+		fmt.Println("Process ID is : ", processID)
 
-	// Destroy
-	cmd = exec.Command("docker", "rm", strings.TrimSpace(string(out)))
-	//cmd.Stdout = os.Stdout
-	//cmd.Stderr = os.Stderr
-	outstop, _ = cmd.CombinedOutput()
+		// docker container stop $(docker container ls -q --filter name=myapp*)
+		//cmd := exec.Command("docker", "stop", processName)
+		cmdstop := exec.Command("docker", "stop", processID)
+		_, _ = cmdstop.CombinedOutput()
 
-	fmt.Println("Removing container : ", strings.TrimSpace(string(outstop)))
+		fmt.Println("Stopping container : ", processID)
 
+		// Destroy
+		cmd = exec.Command("docker", "rm", processID)
+		//cmd.Stdout = os.Stdout
+		//cmd.Stderr = os.Stderr
+		_, _ = cmd.CombinedOutput()
+
+		fmt.Println("Removing container : ", processID)
+	}
 }
 
 // RemoveProfile is used to stop a profile

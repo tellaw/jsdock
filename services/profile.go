@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/user"
@@ -9,7 +8,6 @@ import (
 	"strings"
 
 	"tellaw.org/jsdock/config"
-	"tellaw.org/jsdock/model"
 )
 
 // getProfilesPath Method used to return the profiles files paths
@@ -54,8 +52,10 @@ func GetProfileList() []string {
 
 	err := filepath.Walk(profileDir, func(path string, info os.FileInfo, err error) error {
 		if path != profileDir {
-			path = strings.Replace(path, ".json", "", -1)
-			profiles = append(profiles, strings.Replace(path, profileDir, "", -1))
+			if strings.Contains(path, ".json") {
+				path = strings.Replace(path, ".json", "", -1)
+				profiles = append(profiles, strings.Replace(path, profileDir, "", -1))
+			}
 		}
 		return nil
 	})
@@ -64,20 +64,6 @@ func GetProfileList() []string {
 		panic(err)
 	}
 
-	for _, profile := range profiles {
-		fmt.Println(profile)
-	}
-
 	return profiles
-
-}
-
-// LoadProfile Loading profile
-func LoadProfile(profileName string) model.Profile {
-
-	var profile model.Profile
-	profile.Alias = "test"
-
-	return profile
 
 }

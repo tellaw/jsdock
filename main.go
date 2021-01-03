@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
+	"text/tabwriter"
 
 	"tellaw.org/jsdock/services"
 )
@@ -19,10 +21,19 @@ func main() {
 	actionName := services.GetAction()
 	profileName := services.GetProfile()
 
-	fmt.Println("JSDOCK version ", version)
-	fmt.Println("Action : ", actionName)
-	fmt.Println("Sources : ", pathParam)
-	fmt.Println("Profile : ", profileName)
+	fmt.Println("")
+	fmt.Println("JSDOCK (version ", version, ")")
+	fmt.Println("------------------------")
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', 0)
+	fmt.Fprintln(w, "Requested action\t"+actionName)
+
+	fmt.Fprintln(w, "Sources directory\t"+pathParam)
+	if profileName == "" {
+		fmt.Fprintln(w, "Selected profile\tundefined")
+	} else {
+		fmt.Fprintln(w, "Selected profile\t"+profileName)
+	}
+	w.Flush()
 	fmt.Println("------------------------")
 
 	switch strings.ToLower(actionName) {
@@ -40,6 +51,15 @@ func main() {
 
 	case "version":
 		fmt.Println(version)
+
+	case "help":
+		services.Help()
+
+	case "list":
+		services.List()
+
+	case "?":
+		services.Help()
 
 	default:
 		// Default action to define
