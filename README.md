@@ -52,7 +52,9 @@ Start command is the default command. It is optionnal.
 > jsdock start <profile>
 ```
 
-()
+![JSDock start already running](https://github.com/tellaw/jsdock/blob/master/doc/images/jsdock-2.gif)
+
+When JSDock is starting a server, it'll check for an already running server and shut it down, it'll also check conflict to resolve them.
 
 #### Stop / Down
 Stop action is used to stop & remove the dev server.
@@ -62,6 +64,9 @@ Dev server is always removed, in order to be restart in a fully clean context ne
 > jsdock stop <profile>
 ```
 
+![JSDock stop](https://github.com/tellaw/jsdock/blob/master/doc/images/jsdock-stop.gif)
+
+
 #### Attach
 Attach, set the default profile for this directory. It creates a .jsdock file containing the profile name.
 To detach a directory, you can simply remove this file.
@@ -69,11 +74,37 @@ To detach a directory, you can simply remove this file.
 > jsdock attach
 ```
 
+![Introduction](https://github.com/tellaw/jsdock/blob/master/doc/images/jsdock-1.gif)
+
+
 #### Connect
 Up to now, the connect action dumps the command line to use tu connect to the container.
 ```
 > jsdock connect <profile>
 ```
+
+![Connect Action](https://github.com/tellaw/jsdock/blob/master/doc/images/jsdock-connect.gif)
+
+#### List
+List the available profiles on the setup. This command will dump every profile, its alias and its image.
+It makes easy for you to have an overview of your setup, and possible conflicts. 
+
+```
+> jsdock list
+```
+
+![List profiles](https://github.com/tellaw/jsdock/blob/master/doc/images/jsdock-list.gif)
+
+#### Help or ?
+
+Display the help
+
+```
+> jsdock help
+> jsdock ?
+```
+
+![Help](https://github.com/tellaw/jsdock/blob/master/doc/images/jsdock-help.gif)
 
 ### Profile Name
 Profile name is the filename of the profile located in your <home>/jsdock/ directory.
