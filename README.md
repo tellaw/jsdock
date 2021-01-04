@@ -323,6 +323,10 @@ Here you can set volumes to mount inside the container. Sources are a dynamic vo
 ```
 Here, we do inject an apache configuration inside the container.
 
+## Network
+
+JSDock automatically add a network called jsdock_net to all of the container it managed. This makes possible for you to communicate beetween too servers using the alias you declared in the JSON Profile.
+
 ## Some samples for the configuration.
 I wanted to share with you the samples of my configurations. This may help you to start quickly.
 All files are stored in the following github project :
