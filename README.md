@@ -15,6 +15,8 @@ Profiles can be configured using dynamic sources directory. The sources director
 2. Go to your sources directory and attach it the good profile -> '> jsdock attach'
 3. Start server => '> jsdock' 
 
+![Introduction](https://github.com/tellaw/jsdock/blob/master/doc/images/jsdock-1.gif)
+
 Or just read this documentation...
 
 ## Setup & Install
