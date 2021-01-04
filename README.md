@@ -5,6 +5,36 @@ Forget the dedicated docker compose per application or any unreadable command li
 
 JSDock wrap development using docker and WSL2 into something very easy.
 
+- [JSDock](#jsdock)
+  * [How does it works ?](#how-does-it-works--)
+  * [Setup & Install](#setup---install)
+  * [Command line usage](#command-line-usage)
+    + [Actions](#actions)
+      - [Start](#start)
+      - [Stop / Down](#stop---down)
+      - [Attach](#attach)
+      - [Connect](#connect)
+      - [List](#list)
+      - [Help or ?](#help-or--)
+    + [Profile Name](#profile-name)
+    + [Source Path](#source-path)
+  * [Configuration](#configuration)
+    + [Profile](#profile)
+  * [Commands](#commands)
+    + [Starting Server using sources from a directory](#starting-server-using-sources-from-a-directory)
+    + [Starting a server without sources](#starting-a-server-without-sources)
+  * [Profile Configuration](#profile-configuration)
+    + [Example of configuration](#example-of-configuration)
+    + [Alias](#alias)
+    + [Image](#image)
+    + [Sources](#sources)
+    + [Ports](#ports)
+    + [ENV Variables](#env-variables)
+    + [Volumes](#volumes)
+  * [Network](#network)
+  * [Some samples for the configuration.](#some-samples-for-the-configuration)
+
+
 ## How does it works ?
 JSDock keeps the configuration of every server in a profile repository described in JSON (~/jsdock/). Each profile is linked automatically to a dev network, making communication beetween dockers very easy.
 Profiles can be configured using dynamic sources directory. The sources directory can be injected automatically inside the server using you path context or any path given by you, or set as default.
