@@ -30,14 +30,19 @@ func GetProfileLocation() string {
 // HasProfileFile Method used to know if a config file exists
 func HasProfileFile(fileName string) bool {
 
-	fullFileName := ""
-	fullFileName = getProfilesPath() + fileName + ".json"
-	_, err := os.Stat(fullFileName)
-	if os.IsNotExist(err) {
-		//log.Println("Unable to find profile in : " + fullFileName)
-		return false
+	jsonfullFileName := getProfilesPath() + fileName + ".json"
+	yamlfullFileName := getProfilesPath() + fileName + ".yaml"
+
+	status := false
+
+	if _, err := os.Stat(jsonfullFileName); err == nil {
+		status = true
+
+	} else if _, err := os.Stat(yamlfullFileName); err == nil {
+		status = true
 	}
-	return true
+
+	return status
 }
 
 /*
