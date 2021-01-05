@@ -36,7 +36,7 @@ JSDock wrap development using docker and WSL2 into something very easy.
 
 
 ## How does it works ?
-JSDock keeps the configuration of every server in a profile repository described in JSON (~/jsdock/). Each profile is linked automatically to a dev network, making communication beetween dockers very easy.
+JSDock keeps the configuration of every server in a profile repository described in JSON or YAML (~/jsdock/). Each profile is linked automatically to a dev network, making communication beetween dockers very easy.
 Profiles can be configured using dynamic sources directory. The sources directory can be injected automatically inside the server using you path context or any path given by you, or set as default.
 
 *So, want to start ?*
@@ -163,8 +163,9 @@ Profiles must be stored in <home>/jsdock directory
 ```
 ~/jsdock/
 ```
-	
-Sample configuration file
+see the details of configuration later in this documentation.
+
+#### Sample JSON configuration file
 ```
 {
 	"alias" : "phpdev",
@@ -192,6 +193,25 @@ Sample configuration file
     ]
 	
 }
+```
+
+#### Sample YAML configuration file
+
+```
+alias: imageAlias
+image: tellaw-php-74-apache
+sources: "/var/www/html"
+ports:
+- host: '80'
+  container: '80'
+- host: '82'
+  container: '82'
+env:
+  mykey: myvalue
+  mykey2: myvalue2
+volumes:
+- host: "/home/tellaw/jsdock/conf/000-sf4-default.conf"
+  container: "/etc/apache2/sites-available/000-default.conf"
 ```
 
 ## Commands
@@ -239,8 +259,9 @@ Then just start it from anywhere using the format :
 ## Profile Configuration
 
 ### Example of configuration
-Sample configuration file
+#### Sample JSON configuration file
 ```
+File name : ~/jsdock/myprofile.json (lowercase)
 {
 	"alias" : "phpdev",
 	"image" : "tellaw-php-74-apache",
@@ -269,6 +290,27 @@ Sample configuration file
 }
 ```
 
+#### Sample YAML configuration file
+```
+File name : ~/jsdock/myprofile.yaml (lowercase and yaml as extension)
+
+alias: imageAlias
+image: tellaw-php-74-apache
+sources: "/var/www/html"
+ports:
+- host: '80'
+  container: '80'
+- host: '82'
+  container: '82'
+env:
+  mykey: myvalue
+  mykey2: myvalue2
+volumes:
+- host: "/home/tellaw/jsdock/conf/000-sf4-default.conf"
+  container: "/etc/apache2/sites-available/000-default.conf"
+
+```
+
 ### Alias
 
 Alias is the name you gave to the profile. This name must be uniq as it'll make JSDock able to understand if the application is already running.
@@ -276,10 +318,14 @@ Alias is the name you gave to the profile. This name must be uniq as it'll make 
 The alias will also be used to communicate beetween containers.
 
 ```
+JSON : 
 {
 	"alias" : "phpdev",
 ...
 }
+
+YAML :
+alias: imageAlias
 ```
 ### Image
 
@@ -287,10 +333,14 @@ This is the name of the image that you want to use.
 For my purpose, I do use custom images contaiing specific configurations for local dev. I do share thoses samples in one of my github projects (jsdock-samples).
 
 ```
+JSON : 
 {
 	"image" : "php:7.4-apache",
 ...
 }
+
+YAML : 
+image: tellaw-php-74-apache
 ```
 Here, we are requesting the server to use an image PHP, version 7.4 with Apache.
 
@@ -299,10 +349,14 @@ Here, we are requesting the server to use an image PHP, version 7.4 with Apache.
 This is the path where you ant to inject the source directory. The sources will be mounted as a volume to this path.
 
 ```
+JSON : 
 {
 	"sources" : "/var/www/html",
 ...
 }
+
+YAML : 
+sources: "/var/www/html"
 ```
 This means to JSDock that the sources have to be mounted in this directory iside the container.
 
@@ -310,6 +364,7 @@ This means to JSDock that the sources have to be mounted in this directory iside
 In this section, you describe the ports required by your server. at startup, JSDock will check any conflict of port with already running container. If any conflict is going to happen, JSDock will try to stop the other containers.
 
 ```
+JSON : 
 	"ports" : [
         {
             "host" : "80",
@@ -320,6 +375,15 @@ In this section, you describe the ports required by your server. at startup, JSD
             "container" : "82"
         }
     ],
+
+YAML :
+
+ports:
+- host: '80'
+  container: '80'
+- host: '82'
+  container: '82'
+
 ```
 This means the JSDock should expose ports 80 and 82 to the same ports of the host.
 
@@ -327,6 +391,8 @@ This means the JSDock should expose ports 80 and 82 to the same ports of the hos
 ENV Variables makes possible to set env variables inside the container.
 
 ```
+JSON : 
+
 {
 	"env" : {
 		"mykey":"myvalue",
@@ -334,6 +400,13 @@ ENV Variables makes possible to set env variables inside the container.
 	},
 ...
 }
+
+YAML :
+
+env:
+  mykey: myvalue
+  mykey2: myvalue2
+
 ```
 Here, we set two env variables, mykey and mykey2.
 
@@ -341,6 +414,7 @@ Here, we set two env variables, mykey and mykey2.
 Here you can set volumes to mount inside the container. Sources are a dynamic volume, which is not configure in this section.
 
 ```
+JSON : 
 {
 	"volumes" : [
         {
@@ -350,6 +424,13 @@ Here you can set volumes to mount inside the container. Sources are a dynamic vo
     ]
 ...
 }
+
+YAML :
+
+volumes:
+- host: "/home/tellaw/jsdock/conf/000-sf4-default.conf"
+  container: "/etc/apache2/sites-available/000-default.conf"
+
 ```
 Here, we do inject an apache configuration inside the container.
 
