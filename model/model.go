@@ -17,6 +17,19 @@ type Profile struct {
 	Network map[string]string
 }
 
+// YAMLProfile is the struct representing the data of the profile json file describing
+type YAMLProfile struct {
+
+	// https://yourbasic.org/golang/json-example/
+	Alias   string            `json:"alias"`
+	Sources string            `json:"sources"`
+	Image   string            `json:"image"`
+	Env     map[string]string `json:"env"`
+	Ports   []Port            `json:"ports"`
+	Volumes []Volume          `json:"volumes"`
+	Network map[string]string
+}
+
 // Volume is the struct object for docker vulomes mapping
 type Volume struct {
 	Host      string `json:"host"`

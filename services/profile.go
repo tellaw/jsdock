@@ -55,6 +55,9 @@ func GetProfileList() []string {
 			if strings.Contains(path, ".json") {
 				path = strings.Replace(path, ".json", "", -1)
 				profiles = append(profiles, strings.Replace(path, profileDir, "", -1))
+			} else if strings.Contains(path, ".yaml") {
+				path = strings.Replace(path, ".yaml", "", -1)
+				profiles = append(profiles, strings.Replace(path, profileDir, "", -1))
 			}
 		}
 		return nil

@@ -13,6 +13,7 @@ import (
 	"tellaw.org/jsdock/jsonparser"
 	"tellaw.org/jsdock/model"
 	"tellaw.org/jsdock/prompt"
+	"tellaw.org/jsdock/yamlparser"
 )
 
 // Attach is used to configure a directory to work with this app
@@ -55,7 +56,7 @@ func Stop(profileName string) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
 	}
 
-	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
+	profileData := getProfileFactory(getProfilesPath(), profileName)
 	// Check if a profile with same alias is already runnin
 	if docker.IsProfileRunning(docker.GetAlias(profileData)) {
 		fmt.Println("Profile [" + profileName + "] is running, stopping...")
@@ -78,7 +79,7 @@ func Connect(profileName string) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
 	}
 
-	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
+	profileData := getProfileFactory(getProfilesPath(), profileName)
 	docker.Connect(profileData)
 }
 
@@ -93,7 +94,7 @@ func Start(profileName string) {
 		log.Fatal("The requested profile " + profileName + " does not exists")
 	}
 
-	profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
+	profileData := getProfileFactory(getProfilesPath(), profileName)
 
 	CheckAndResolveProfileConflicts(profileData)
 	// Check if a profile with same alias is already runnin
@@ -194,13 +195,34 @@ func List() {
 
 	for _, profileName := range profiles {
 
-		profileData := jsonparser.LoadProfileJSON(getProfilesPath(), profileName)
+		profileData := getProfileFactory(getProfilesPath(), profileName)
 
 		fmt.Fprintln(w, profileName+"\t Image => "+profileData.Image+"\t Alias => "+profileData.Alias)
 
 	}
 	w.Flush()
 	fmt.Println(" ")
+}
+
+func getProfileFactory(profileLocation string, fileName string) model.Profile {
+
+	jsonfullFileName := getProfilesPath() + fileName + ".json"
+	yamlfullFileName := getProfilesPath() + fileName + ".yaml"
+
+	var profileData model.Profile
+
+	if _, err := os.Stat(jsonfullFileName); err == nil {
+		// Unable to find the JSON profile
+
+		profileData = jsonparser.LoadProfileJSON(getProfilesPath(), fileName)
+
+	} else if _, err := os.Stat(yamlfullFileName); err == nil {
+		// Unable to also find the yaml profile
+		profileData = yamlparser.LoadProfileYAML(getProfilesPath(), fileName)
+	}
+
+	return profileData
+
 }
 
 // CheckAndInitNetwork method is used to check if jsdock network is available
