@@ -21,12 +21,12 @@ type Profile struct {
 type YAMLProfile struct {
 
 	// https://yourbasic.org/golang/json-example/
-	Alias   string            `json:"alias"`
-	Sources string            `json:"sources"`
-	Image   string            `json:"image"`
-	Env     map[string]string `json:"env"`
-	Ports   []Port            `json:"ports"`
-	Volumes []Volume          `json:"volumes"`
+	Alias   string            `yaml:"alias"`
+	Sources string            `yaml:"sources"`
+	Image   string            `yaml:"image"`
+	Env     map[string]string `yaml:"env"`
+	Ports   []Port            `yaml:"ports"`
+	Volumes []Volume          `yaml:"volumes"`
 	Network map[string]string
 }
 
