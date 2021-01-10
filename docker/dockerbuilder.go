@@ -99,7 +99,7 @@ func getVolumes(commandLine []string, profileData model.Profile) []string {
 		// Check if Volume has conditions
 		for _, fileExist := range volume.Conditions.FileExists {
 			if tools.FileExists(fileExist) == false {
-				fmt.Println("File exist condition is not true", fileExist)
+				fmt.Println("[condition_check] : File exist condition is false for : ", fileExist)
 				conditionChecked = false
 			}
 		}
@@ -107,7 +107,7 @@ func getVolumes(commandLine []string, profileData model.Profile) []string {
 		// Check if Volume has conditions
 		for _, dirExist := range volume.Conditions.DirExists {
 			if tools.DirExists(dirExist) == false {
-				fmt.Println("Directory exist condition is not true", dirExist)
+				fmt.Println("[condition_check] : Directory exist condition is false for : ", dirExist)
 				conditionChecked = false
 			}
 		}
@@ -115,13 +115,15 @@ func getVolumes(commandLine []string, profileData model.Profile) []string {
 		// Check if Volume has conditions
 		for _, fileContain := range volume.Conditions.FileContains {
 			if tools.FileContains(fileContain.File, fileContain.Value) == false {
-				fmt.Println("File contain condition is not true", fileContain)
+				fmt.Println("[condition_check] : File contain condition is false for : ", fileContain)
 				conditionChecked = false
 			}
 		}
 
 		if conditionChecked == true {
 			commandLine = append(commandLine, "-v "+volume.Host+":"+volume.Container)
+		} else {
+			fmt.Println("[condition_check] : Conditions false for volume : ", volume.Host, " to ", volume.Container, " ... ignoring")
 		}
 	}
 	return commandLine

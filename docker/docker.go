@@ -7,7 +7,6 @@ Parameters line building is done by dockerbuilder.
 import (
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"strings"
 
@@ -147,14 +146,20 @@ func dockerStopOrDown(command []string) {
 // dockerExec method used to start a docker command
 func dockerRun(command []string) {
 
-	log.Println("Command is : ", command)
+	fmt.Println(command)
 
-	cmd := exec.Command("bash", "-c", strings.Join(command, " "))
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err := cmd.Run()
+	out, err := exec.Command("bash", "-c", strings.Join(command, " ")).Output()
+
+	if len(string(out)) > 1 {
+		fmt.Println("Docker ID : ", strings.TrimSpace(string(out)))
+		fmt.Println("Server started")
+	} else {
+		fmt.Println("No information returned by docker (no process ID)... Docker has probably failed starting")
+	}
 
 	if err != nil {
-		log.Println("cmd.Run() failed with \n", err)
+		log.Println("docker failed with \n", err)
+		log.Fatal("Docker has not started")
 	}
+
 }
