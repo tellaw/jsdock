@@ -41,7 +41,7 @@ func main() {
 		services.Attach()
 
 	case "start":
-		services.Start(profileName)
+		services.Start(profileName, pathParam)
 
 	case "stop":
 		services.Stop(profileName)
@@ -64,7 +64,7 @@ func main() {
 	default:
 		// Default action to define
 		// No command, so we have to find the correct command
-		services.Start(profileName)
+		services.Start(profileName, pathParam)
 	}
 
 }

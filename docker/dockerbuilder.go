@@ -1,11 +1,12 @@
 package docker
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
-	"tellaw.org/jsdock/config"
 	"tellaw.org/jsdock/model"
+	"tellaw.org/jsdock/tools"
 )
 
 /*
@@ -78,7 +79,7 @@ func getSourcesVolume(profileData model.Profile) string {
 
 	if profileData.Sources != "" {
 
-		host := config.GetCurrentPath()
+		host := profileData.PathParam
 		container := profileData.Sources
 
 		return "-v " + host + ":" + container
@@ -88,10 +89,40 @@ func getSourcesVolume(profileData model.Profile) string {
 	}
 
 }
+
 func getVolumes(commandLine []string, profileData model.Profile) []string {
 
 	for _, volume := range profileData.Volumes {
-		commandLine = append(commandLine, "-v "+volume.Host+":"+volume.Container)
+
+		var conditionChecked bool = true
+
+		// Check if Volume has conditions
+		for _, fileExist := range volume.Conditions.FileExists {
+			if tools.FileExists(fileExist) == false {
+				fmt.Println("File exist condition is not true", fileExist)
+				conditionChecked = false
+			}
+		}
+
+		// Check if Volume has conditions
+		for _, dirExist := range volume.Conditions.DirExists {
+			if tools.DirExists(dirExist) == false {
+				fmt.Println("Directory exist condition is not true", dirExist)
+				conditionChecked = false
+			}
+		}
+
+		// Check if Volume has conditions
+		for _, fileContain := range volume.Conditions.FileContains {
+			if tools.FileContains(fileContain.File, fileContain.Value) == false {
+				fmt.Println("File contain condition is not true", fileContain)
+				conditionChecked = false
+			}
+		}
+
+		if conditionChecked == true {
+			commandLine = append(commandLine, "-v "+volume.Host+":"+volume.Container)
+		}
 	}
 	return commandLine
 }

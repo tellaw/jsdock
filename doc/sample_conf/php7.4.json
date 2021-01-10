@@ -19,8 +19,33 @@
 	"volumes" : [
         {
             "host" : "/tmp",
-            "container" : "/tmp"
+            "container" : "/tmp",
+            "conditions" : {
+
+                "fileExists" : [
+                    "subdir/webmyfile.conf",
+                    "/home/tellaw/myfile.conf"
+                ],
+                
+                "dirExists" : [
+                    "public",
+                    "/home/tellaw/mydir"
+                ],
+                
+                "fileContains" : [
+                    {   
+                        "file":"subdir/myfile.conf" ,
+                        "value": "mycontent"
+                    },
+                    {   
+                        "file":"/home/tellaw/subdir/myfile.conf" ,
+                        "value": "mycontent"
+                    }
+                ]
+
+            }
         }
     ]
+    
 	
 }

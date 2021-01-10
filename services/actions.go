@@ -84,7 +84,7 @@ func Connect(profileName string) {
 }
 
 // Start is the method used to start a docker kit
-func Start(profileName string) {
+func Start(profileName string, pathParam string) {
 
 	if strings.TrimSpace(profileName) == "" {
 		log.Fatal("Missing the name of the profile to use")
@@ -96,18 +96,12 @@ func Start(profileName string) {
 
 	profileData := getProfileFactory(getProfilesPath(), profileName)
 
+	// Add Pathparam to profileData model
+	profileData.PathParam = pathParam
+
 	CheckAndResolveProfileConflicts(profileData)
+
 	// Check if a profile with same alias is already runnin
-	/*
-		if docker.IsProfileRunning(docker.GetAlias(profileData)) {
-			log.Println("Profile [" + profileName + "] is running, stopping...")
-			// Stop it
-			docker.StopProfile(profileData)
-		} else {
-			log.Println("profile is not running")
-		}
-		log.Println("profile not running anymore")
-	*/
 	if docker.IsProfileStopped(docker.GetAlias(profileData)) {
 		// Then remove the profile using a simple docker rm
 		fmt.Println("Profile [" + profileName + "] is stopped, removing...")
