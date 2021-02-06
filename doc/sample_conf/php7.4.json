@@ -1,14 +1,15 @@
 {
-	"alias" : "imageAlias",
+    "alias" : "imageAlias",
+    "allowMultipleInstances" : true,
 	"image" : "tellaw-php-74-apache",
 	"sources" : "/var/www/html",
 	"ports" : [
         {
-            "host" : "80",
+            "host" : "80-90",
             "container" : "80"
         },
 		{
-            "host" : "82",
+            "host" : "82,85",
             "container" : "82"
         }
     ],

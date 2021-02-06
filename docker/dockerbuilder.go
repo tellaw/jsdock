@@ -3,9 +3,11 @@ package docker
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 
 	"tellaw.org/jsdock/model"
+	"tellaw.org/jsdock/network"
 	"tellaw.org/jsdock/tools"
 )
 
@@ -141,7 +143,46 @@ func getEnv(commandLine []string, profileData model.Profile) []string {
 func getPorts(commandLine []string, profileData model.Profile) []string {
 
 	for _, port := range profileData.Ports {
-		commandLine = append(commandLine, "-p "+port.Host+":"+port.Container)
+
+		var hostPort string
+
+		// If string contains a comma, we'll range over all splitted substrings
+		if strings.Contains(port.Host, ",") {
+
+			values := strings.Split(port.Host, ",")
+
+			for _, value := range values {
+
+				if strings.Contains(value, "-") {
+					// String contains dashed, need to check all subvalues
+
+					rangeToBrowse := strings.Split(value, "-")
+
+					startValue, _ := strconv.ParseInt(rangeToBrowse[0], 10, 16)
+					endValue, _ := strconv.ParseInt(rangeToBrowse[1], 10, 16)
+
+					for i := startValue; i < endValue; i++ {
+
+						strI := strconv.FormatInt(i, 10)
+						if network.IsPortAvailable(strI) {
+							hostPort = strI
+							break
+						}
+
+					}
+
+				} else if network.IsPortAvailable(value) {
+					hostPort = value
+					break
+				}
+
+			}
+
+		} else {
+			hostPort = port.Host
+		}
+
+		commandLine = append(commandLine, "-p "+hostPort+":"+port.Container)
 	}
 
 	return commandLine

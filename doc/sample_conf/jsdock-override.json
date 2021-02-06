@@ -1,0 +1,53 @@
+{
+    "override" : {
+        
+        "alias" : "imageAlias",
+        "allowMultipleInstances" : true,
+	    "image" : "tellaw-php-74-apache",
+	    "sources" : "/var/www/html",
+	    "ports" : [
+            {
+                "host" : "80-90",
+                "container" : "80"
+            },
+		    {
+                "host" : "82,85",
+                "container" : "82"
+            }
+        ],
+	    "env" : {
+		    "mykey":"myvalue",
+		    "mykey2":"myvalue2"
+	    },
+	    "volumes" : [
+            {
+                "host" : "/tmp",
+                "container" : "/tmp",
+                "conditions" : {
+
+                    "fileExists" : [
+                        "subdir/webmyfile.conf",
+                        "/home/tellaw/myfile.conf"
+                    ],
+                
+                    "dirExists" : [
+                        "public",
+                        "/home/tellaw/mydir"
+                    ],
+                
+                    "fileContains" : [
+                        {   
+                            "file":"subdir/myfile.conf" ,
+                            "value": "mycontent"
+                        },
+                        {   
+                            "file":"/home/tellaw/subdir/myfile.conf" ,
+                            "value": "mycontent"
+                        }
+                    ]
+
+                }
+            }
+        ]
+    }
+}

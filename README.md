@@ -35,8 +35,11 @@ JSDock wrap development using docker and WSL2 into something very easy.
     + [Ports](#ports)
     + [ENV Variables](#env-variables)
     + [Volumes](#volumes)
+    + [Conditionnal volumes](#conditionnal-volumes)
   * [Network](#network)
   * [Some samples for the configuration.](#some-samples-for-the-configuration)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 
 ## How does it works ?
