@@ -429,6 +429,7 @@ JSON :
 ...
 }
 
+
 YAML :
 
 volumes:
@@ -436,7 +437,58 @@ volumes:
   container: "/etc/apache2/sites-available/000-default.conf"
 
 ```
-Here, we do inject an apache configuration inside the container.
+Here, we are injecting an apache configuration inside the container.
+
+### Conditionnal volumes
+Conditionnal volumes will help you to inject inside your container specific configuration depending of the source code. Classic use case is an Apache webserver shared beetween projects using Synfony or Wordpress PHP Application.
+In such case, you will require that JSDOck inject the correct configuration of the VHost depending of the sources.
+
+Conditionnal volumes can be triggered by :
+
+1. A file available in a specific location
+2. A directory available in a specific location
+3. A specific text available inside a text file
+
+```
+JSON : 
+{
+...
+	"volumes" : [
+        {
+            "host" : "/home/tellaw/jsdock/conf/000-sf4-default.conf",
+            "container" : "/etc/apache2/sites-available/000-default.conf",
+			"conditions" : {
+
+                "fileExists" : [
+                    "subdir/webmyfile.conf",
+                    "/home/tellaw/myfile.conf"
+                ],
+                
+                "dirExists" : [
+                    "public",
+                    "/home/tellaw/mydir"
+                ],
+                
+                "fileContains" : [
+                    {   
+                        "file":"subdir/myfile.conf" ,
+                        "value": "mycontent"
+                    },
+                    {   
+                        "file":"/home/tellaw/subdir/myfile.conf" ,
+                        "value": "mycontent"
+                    }
+                ]
+
+            }
+        }
+    ]
+...
+}
+```
+
+When specifying multiple value inside one criteria, they are always considered as a logic OR.
+
 
 ## Network
 
