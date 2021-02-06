@@ -488,6 +488,27 @@ JSON :
     ]
 ...
 }
+
+
+YAML :
+
+volumes:
+- host: "/home/tellaw/jsdock/conf/000-sf4-default.conf"
+  container: "/etc/apache2/sites-available/000-default.conf"
+  conditions:
+    fileExists:
+    - subdir/webmyfile.conf
+    - "/home/tellaw/myfile.conf"
+    dirExists:
+    - public
+    - "/home/tellaw/mydir"
+    fileContains:
+    - file: subdir/myfile.conf
+      value: mycontent
+    - file: "/home/tellaw/subdir/myfile.conf"
+      value: mycontent
+
+
 ```
 
 When specifying multiple value inside one criteria, they are always considered as a logic OR.
