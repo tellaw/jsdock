@@ -460,7 +460,7 @@ JSON :
         {
             "host" : "/home/tellaw/jsdock/conf/000-sf4-default.conf",
             "container" : "/etc/apache2/sites-available/000-default.conf",
-			"conditions" : {
+			      "conditions" : {
 
                 "fileExists" : [
                     "subdir/webmyfile.conf",
